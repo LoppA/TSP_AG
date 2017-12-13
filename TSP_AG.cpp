@@ -101,7 +101,7 @@ void reproduction () {
 	sort (pop, pop + POP);
 
 	last_pred++;
-	if (gen%PRED_FREC) {
+	if (gen%PRED_FREC == 0) {
 		predation();
 		last_pred = 0;
 	} else if (last_pred == ART_FREC) {
@@ -112,6 +112,7 @@ void reproduction () {
 
 	for (int i = 0; i < POP; i++) {
 		double chance = (double)(i + 1) / (double)POP;
+		chance *= chance;
 		if (raffle(chance)) 
 			parents.push_back(pop[i]);
 	}
