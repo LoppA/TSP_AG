@@ -11,7 +11,7 @@
 
 using namespace std;
 
-double dist[POP][POP];
+double dist[N][N];
 
 Gen::Gen() {
 	for (int i = 0; i < N; i++)
@@ -31,16 +31,16 @@ bool f = 0;
 double Gen::rate () {
 	double fit = 0;
 
-	for (int i = 0; i < POP; i++) {
-		int j = (i + 1)%POP;
+	for (int i = 0; i < N; i++) {
+		int j = (i + 1)%N;
 		fit += dist[pos[i]][pos[j]];
 	}
 
 	if (fit == 0.0 and f) {
 		print();
 	
-		for (int i = 0; i < POP; i++) {
-			int j = (i + 1)%POP;
+		for (int i = 0; i < N; i++) {
+			int j = (i + 1)%N;
 			printf ("%d %d: %lf\n", pos[i], pos[j], dist[pos[i]][pos[j]]);
 		}
 
@@ -51,7 +51,7 @@ double Gen::rate () {
 }
 
 void Gen::operator = (const Gen &other) {
-	memcpy (this->pos, other.pos, POP * sizeof (int));
+	memcpy (this->pos, other.pos, N * sizeof (int));
 	this->fitness = other.fitness;
 }
 
@@ -65,12 +65,12 @@ bool raffle (double prob) {
 	return rand() < ceil(prob * RAND_MAX);
 }
 
-bool vis[POP];
+bool vis[N];
 Gen cross (Gen mama, Gen papa) {
 	Gen child;
 
 	memset (vis, 0, sizeof vis);
-	for (int i = 0; i < POP; i++) {
+	for (int i = 0; i < N; i++) {
 		child.pos[i] = -1;
 		if (!vis[mama.pos[i]] and !vis[papa.pos[i]]) {
 			if (raffle(0.5))	child.pos[i] = mama.pos[i];
@@ -86,13 +86,13 @@ Gen cross (Gen mama, Gen papa) {
 	}
 
 	vector <int> unused;
-	for (int i = 0; i < POP; i++)
+	for (int i = 0; i < N; i++)
 		if (!vis[i])
 			unused.push_back(i);
 	random_shuffle(unused.begin(), unused.end());
 
 	int j = 0;
-	for (int i = 0; i < POP; i++)
+	for (int i = 0; i < N; i++)
 		if (child.pos[i] == -1)
 			child.pos[i] = unused[j++];
 
@@ -111,7 +111,7 @@ void reproduction () {
 			parents.push_back(pop[i]);
 	}
 
-	next_gen.push_back(parents[parents.size() - 1]);
+	next_gen.push_back(pop[POP - 1]);
 	while (next_gen.size() < POP) {
 		Gen mama = parents[rand()%parents.size()];
 		Gen papa = parents[rand()%parents.size()];
@@ -126,8 +126,8 @@ void reproduction () {
 int main (int argc, char *argv[]) {
 	srand(time(NULL));
 
-	for (int i = 0; i < POP; i++) 
-		for (int j = 0; j < POP; j++) 
+	for (int i = 0; i < N; i++) 
+		for (int j = 0; j < N; j++) 
 			scanf ("%lf", &dist[i][j]);
 
 	f = 1;

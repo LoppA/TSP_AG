@@ -2,8 +2,8 @@
 #define __TSP_AG_H__
 
 #define N 10
-#define POP 5
-#define GEN 10
+#define POP 100
+#define GEN 20
 
 struct Gen {
 	int pos[N];
