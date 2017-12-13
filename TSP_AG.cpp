@@ -27,24 +27,12 @@ void Gen::print () {
 	cout << endl;
 }
 
-bool f = 0;
 double Gen::rate () {
 	double fit = 0;
 
 	for (int i = 0; i < N; i++) {
 		int j = (i + 1)%N;
 		fit += dist[pos[i]][pos[j]];
-	}
-
-	if (fit == 0.0 and f) {
-		print();
-	
-		for (int i = 0; i < N; i++) {
-			int j = (i + 1)%N;
-			printf ("%d %d: %lf\n", pos[i], pos[j], dist[pos[i]][pos[j]]);
-		}
-
-		exit(0);
 	}
 
 	return this->fitness = fit;
@@ -59,6 +47,7 @@ bool Gen::operator < (const Gen &other) const {
 	return this->fitness > other.fitness;
 }
 
+int gen = 0;
 Gen pop[POP], best;
 
 bool raffle (double prob) {
@@ -109,6 +98,7 @@ Gen cross (Gen mama, Gen papa) {
 
 void reproduction () {
 	sort (pop, pop + POP);
+	if (gen%PRED_FREC)	predation();
 
 	vector <Gen> parents, next_gen;
 
@@ -130,6 +120,12 @@ void reproduction () {
 		pop[i] = next_gen[i];
 }
 
+void predation () {
+	int pred = PRED_RATE * POP;
+	for (int i = 0; i < pred; i++)
+		pop[i] = Gen();
+}
+
 int main (int argc, char *argv[]) {
 	srand(time(NULL));
 
@@ -137,21 +133,17 @@ int main (int argc, char *argv[]) {
 		for (int j = 0; j < N; j++) 
 			scanf ("%lf", &dist[i][j]);
 
-	f = 1;
-
 	for (int i = 0; i < POP; i++)
 		pop[i] = Gen();
 
 	best = pop[0];
-	for (int i = 0; i < POP; i++) 
-		if (pop[i].fitness < best.fitness)
-			best = pop[i];
-
-	int gen = GEN;
-	while (gen--) {
+	while (gen++ < GEN) {
 		printf ("Gen: %d\n", GEN - gen);
-		for (int i = 0; i < POP; i++)
+		for (int i = 0; i < POP; i++) {
 			printf ("%lf\n", pop[i].fitness);
+			if (pop[i].fitness < best.fitness)
+				best = pop[i];
+		}
 		printf ("   Best: %lf\n\n", best.fitness);
 		reproduction();
 	}
