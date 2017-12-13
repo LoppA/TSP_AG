@@ -1,12 +1,12 @@
 #ifndef __TSP_AG_H__
 #define __TSP_AG_H__
 
-#define N 25
+#define N 20
 #define POP 10000
 #define GEN 10000
 
-#define PRED_RATE 0.1
-#define PRED_FREC 5
+#define PRED_RATE 0.3
+#define PRED_FREC 10
 
 #define CHANGE_MUT 3
 #define INI_MUT 0.5
