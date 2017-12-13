@@ -2,8 +2,8 @@
 #define __TSP_AG_H__
 
 #define N 25
-#define POP 1000
-#define GEN 100
+#define POP 10000
+#define GEN 10000
 
 #define PRED_RATE 0.3
 #define PRED_FREC 10
