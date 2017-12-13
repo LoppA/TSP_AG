@@ -1,14 +1,20 @@
 #ifndef __TSP_AG_H__
 #define __TSP_AG_H__
 
-#define N 100
+#define N 20
 #define POP 10000
-#define GEN 1000
+#define GEN 10000
 
 #define PRED_RATE 0.1
-#define PRED_FREC 10
-#define ART_FREC 5
-#define MUT 0.5
+#define PRED_FREC 5
+
+#define CHANGE_MUT 3
+#define INI_MUT 0.5
+#define MAX_MUT 0.9
+#define INC_MUT 0.1
+#define N_INI_MUT 5
+#define N_MIN_MUT 1
+#define N_MAX_MUT 9
 
 struct Gen {
 	int pos[N];
@@ -29,6 +35,5 @@ bool raffle (double);
 Gen cross (Gen, Gen);
 void reproduction();
 void predation();
-void artificial();
 
 #endif
