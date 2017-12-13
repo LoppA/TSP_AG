@@ -8,6 +8,7 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
+#include <GL/glut.h>
 
 using namespace std;
 
@@ -145,6 +146,18 @@ void predation () {
 int main (int argc, char *argv[]) {
 	srand(time(NULL));
 
+	glutInit(&argc, argv);
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
+	glutInitWindowPosition(WINDOW_POS, WINDOW_POS);
+	glutInitWindowSize(WINDOW_SIZE, WINDOW_SIZE);
+	glutCreateWindow("TSP");
+
+	//Setar os parametros do OpenGL
+	glMatrixMode(GL_MODELVIEW);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_NORMALIZE);
+
 	for (int i = 0; i < N; i++) 
 		for (int j = 0; j < N; j++) 
 			scanf ("%lf", &dist[i][j]);
@@ -175,5 +188,6 @@ int main (int argc, char *argv[]) {
 	best.print();
 	printf ("%lf\n", best.fitness);
 
+	glutMainLoop();
 	return 0;
 }

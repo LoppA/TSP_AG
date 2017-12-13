@@ -16,6 +16,9 @@
 #define N_MIN_MUT 1
 #define N_MAX_MUT 9
 
+#define WINDOW_POS 20
+#define WINDOW_SIZE 600
+
 struct Gen {
 	int pos[N];
 	double fitness;
