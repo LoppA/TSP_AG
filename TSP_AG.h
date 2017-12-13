@@ -1,7 +1,7 @@
 #ifndef __TSP_AG_H__
 #define __TSP_AG_H__
 
-#define N 40
+#define N 100
 #define POP 10000
 #define GEN 1000
 
@@ -9,7 +9,6 @@
 #define PRED_FREC 10
 #define ART_FREC 5
 #define MUT 0.5
-#define MX_MUT 1
 
 struct Gen {
 	int pos[N];

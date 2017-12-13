@@ -47,7 +47,7 @@ bool Gen::operator < (const Gen &other) const {
 	return this->fitness > other.fitness;
 }
 
-int gen = 0, last_pred = 0;
+int gen = 0, last_pred = 0, tx_mut = 1;
 Gen pop[POP], best;
 
 bool raffle (double prob) {
@@ -87,7 +87,7 @@ Gen cross (Gen mama, Gen papa) {
 			child.pos[i] = unused[j++];
 
 	int ct = 0;
-	while (ct++ < MX_MUT and raffle(MUT)) {
+	while (ct++ < tx_mut and raffle(MUT)) {
 		int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
 
 		swap (child.pos[i], child.pos[j]);
