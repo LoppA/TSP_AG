@@ -47,7 +47,7 @@ bool Gen::operator < (const Gen &other) const {
 	return this->fitness > other.fitness;
 }
 
-int gen = 0;
+int gen = 0, last_pred = 0;
 Gen pop[POP], best;
 
 bool raffle (double prob) {
@@ -86,7 +86,8 @@ Gen cross (Gen mama, Gen papa) {
 		if (child.pos[i] == -1)
 			child.pos[i] = unused[j++];
 
-	if (raffle(MUT)) {
+	int ct = 0;
+	while (ct++ < MX_MUT and raffle(MUT)) {
 		int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
 
 		swap (child.pos[i], child.pos[j]);
@@ -98,7 +99,14 @@ Gen cross (Gen mama, Gen papa) {
 
 void reproduction () {
 	sort (pop, pop + POP);
-	if (gen%PRED_FREC)	predation();
+
+	last_pred++;
+	if (gen%PRED_FREC) {
+		predation();
+		last_pred = 0;
+	} else if (last_pred == ART_FREC) {
+		artificial();
+	}
 
 	vector <Gen> parents, next_gen;
 
@@ -126,6 +134,10 @@ void predation () {
 		pop[i] = Gen();
 }
 
+void artificial () {
+
+}
+
 int main (int argc, char *argv[]) {
 	srand(time(NULL));
 
@@ -138,9 +150,9 @@ int main (int argc, char *argv[]) {
 
 	best = pop[0];
 	while (gen++ < GEN) {
-		printf ("Gen: %d\n", GEN - gen);
+		printf ("Gen: %d\n", gen);
 		for (int i = 0; i < POP; i++) {
-			printf ("%lf\n", pop[i].fitness);
+//			printf ("%lf\n", pop[i].fitness);
 			if (pop[i].fitness < best.fitness)
 				best = pop[i];
 		}
