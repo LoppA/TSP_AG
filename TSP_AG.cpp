@@ -16,7 +16,7 @@ double dist[N][N];
 Gen::Gen() {
 	for (int i = 0; i < N; i++)
 		pos[i] = i;
-	random_shuffle(pos, pos + N);
+	random_shuffle(pos + 1, pos + N);
 
 	rate();
 }
@@ -68,21 +68,22 @@ bool raffle (double prob) {
 bool vis[N];
 Gen cross (Gen mama, Gen papa) {
 	Gen child;
-
 	memset (vis, 0, sizeof vis);
-	for (int i = 0; i < N; i++) {
-		child.pos[i] = -1;
-		if (!vis[mama.pos[i]] and !vis[papa.pos[i]]) {
-			if (raffle(0.5))	child.pos[i] = mama.pos[i];
-			else				child.pos[i] = papa.pos[i];
-		} else if (!vis[mama.pos[i]]) {
-			child.pos[i] = mama.pos[i];
-		} else if (!vis[papa.pos[i]]) {
-			child.pos[i] = papa.pos[i];
-		} 
 
-		if (child.pos[i] != -1)
+	int split = rand()%(N + 1);
+
+	for (int i = 0; i < split; i++) {
+		child.pos[i] = mama.pos[i];
+		vis[child.pos[i]] = true;
+	}
+
+	for (int i = split; i < N; i++) {
+		if (!vis[papa.pos[i]]) {
+			child.pos[i] = papa.pos[i];
 			vis[child.pos[i]] = true;
+		} else {
+			child.pos[i] = -1;
+		}
 	}
 
 	vector <int> unused;
@@ -95,6 +96,12 @@ Gen cross (Gen mama, Gen papa) {
 	for (int i = 0; i < N; i++)
 		if (child.pos[i] == -1)
 			child.pos[i] = unused[j++];
+
+	if (raffle(MUT)) {
+		int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
+
+		swap (child.pos[i], child.pos[j]);
+	}
 
 	child.rate();
 	return child;

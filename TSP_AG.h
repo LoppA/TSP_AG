@@ -5,6 +5,8 @@
 #define POP 100
 #define GEN 20
 
+#define MUT 0.5
+
 struct Gen {
 	int pos[N];
 	double fitness;
