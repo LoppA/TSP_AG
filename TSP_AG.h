@@ -3,7 +3,7 @@
 
 #define N 10
 #define POP 5
-#define GEN 100
+#define GEN 10
 
 struct Gen {
 	int pos[N];

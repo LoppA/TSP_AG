@@ -27,12 +27,24 @@ void Gen::print () {
 	cout << endl;
 }
 
+bool f = 0;
 double Gen::rate () {
 	double fit = 0;
 
 	for (int i = 0; i < POP; i++) {
 		int j = (i + 1)%POP;
 		fit += dist[pos[i]][pos[j]];
+	}
+
+	if (fit == 0.0 and f) {
+		print();
+	
+		for (int i = 0; i < POP; i++) {
+			int j = (i + 1)%POP;
+			printf ("%d %d: %lf\n", pos[i], pos[j], dist[pos[i]][pos[j]]);
+		}
+
+		exit(0);
 	}
 
 	return this->fitness = fit;
@@ -95,11 +107,11 @@ void reproduction () {
 
 	for (int i = 0; i < POP; i++) {
 		double chance = (double)(i + 1) / (double)POP;
-//		double chance = pop[i].fitness / (double)pop[POP-1].fitness;
 		if (raffle(chance)) 
 			parents.push_back(pop[i]);
 	}
 
+	next_gen.push_back(parents[parents.size() - 1]);
 	while (next_gen.size() < POP) {
 		Gen mama = parents[rand()%parents.size()];
 		Gen papa = parents[rand()%parents.size()];
@@ -118,6 +130,8 @@ int main (int argc, char *argv[]) {
 		for (int j = 0; j < POP; j++) 
 			scanf ("%lf", &dist[i][j]);
 
+	f = 1;
+
 	for (int i = 0; i < POP; i++)
 		pop[i] = Gen();
 
@@ -128,6 +142,7 @@ int main (int argc, char *argv[]) {
 
 	int gen = GEN;
 	while (gen--) {
+		printf ("Gen: %d\n", GEN - gen);
 		for (int i = 0; i < POP; i++)
 			printf ("%lf\n", pop[i].fitness);
 		printf ("   Best: %lf\n\n", best.fitness);
