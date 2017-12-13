@@ -3,14 +3,19 @@
 
 #define N 10
 #define POP 10
+#define GEN 10
 
 struct Gen {
 	int pos[N];
+	double fitness;
 
-	// O(N**2)
 	Gen ();
 
 	void print ();
+
+	double rate ();
+
+	void operator = (const Gen &other);
 };
 
 #endif

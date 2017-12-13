@@ -24,17 +24,38 @@ void Gen::print () {
 	cout << endl;
 }
 
-Gen pop[POP];
+double Gen::rate () {
+	double fit = 0;
+
+	for (int i = 0; i < POP; i++) {
+		int j = (i + 1)%POP;
+		fit += dist[pos[i]][pos[j]];
+	}
+
+	return this->fitness = fit;
+}
+
+void Gen::operator = (const Gen &other) {
+	memcpy (this->pos, other.pos, POP * sizeof (int));
+	this->fitness = other.fitness;
+}
+
+Gen pop[POP], best;
 
 int main (int argc, char *argv[]) {
 	srand(time(NULL));
 
-	for (int i = 0; i < POP; i++) {
-		for (int j = 0; j < POP; j++) {
+	for (int i = 0; i < POP; i++) 
+		for (int j = 0; j < POP; j++) 
 			scanf ("%lf", &dist[i][j]);
-			printf ("%lf ", dist[i][j]);
-		}
-		printf ("\n");
+
+	best = pop[0];
+	for (int i = 0; i < POP; i++)
+		if (pop[i].fitness > best.fitness)
+			best = pop[i];
+
+	int gen = GEN;
+	while (gen--) {
 	}
 
 	return 0;
