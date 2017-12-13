@@ -157,7 +157,7 @@ int main (int argc, char *argv[]) {
 	while (gen++ < GEN) {
 		printf ("Gen: %d\n", gen);
 		for (int i = 0; i < POP; i++) {
-//			printf ("%lf\n", pop[i].fitness);
+			printf ("%lf\n", pop[i].fitness);
 			if (pop[i].fitness < best.fitness)
 				best = pop[i];
 		}
