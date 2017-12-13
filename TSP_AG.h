@@ -1,7 +1,7 @@
 #ifndef __TSP_AG_H__
 #define __TSP_AG_H__
 
-#define N 20
+#define N 25
 #define POP 10000
 #define GEN 10000
 
