@@ -8,10 +8,10 @@
 #define PRED_RATE 0.1
 #define PRED_FREC 10
 
-#define CHANGE_MUT 3
-#define INI_MUT 2
+#define CHANGE_MUT 10
+#define INI_MUT 4
 #define MIN_MUT 1
-#define MAX_MUT 3
+#define MAX_MUT 8
 
 #define COORD_FILENAME "./data_for_tsp/coordinates.txt"
 #define FIT_FILENAME "./fitnesses.txt"

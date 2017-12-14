@@ -116,6 +116,73 @@ Gen cross (Gen mama, Gen papa) {
 	for (int i = 0; i < tx_mut; i++) {
 		if (raffle(mut[tx_mut])) {
 			int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
+
+
+			swap (child.pos[i], child.pos[j]);
+		}
+	}
+
+	child.rate();
+	return child;
+}
+
+int nxt[N];
+Gen cross2 (Gen mama, Gen papa) {
+	Gen child;
+	memset (vis, 0, sizeof vis);
+
+	int split = rand()%(N + 1);
+
+	memset (child.pos, -1, sizeof (child.pos));
+	if (rand()%2) {
+		for (int i = 0; i < split; i++) {
+			child.pos[i] = mama.pos[i];
+			vis[child.pos[i]] = true;
+		}
+	} else {
+		for (int i = split; i < N; i++) {
+			child.pos[i] = mama.pos[i];
+			vis[child.pos[i]] = true;
+		}
+	}
+	
+	for (int i = 0; i < N; i++) {
+		int j = (i + 1)%N;
+		nxt[papa.pos[i]] = papa.pos[j];
+	}
+
+	for (int i = 0; i < N; i++) {
+		int j = (i + 1)%N;
+		if (child.pos[j] == -1) {
+			if (!vis[nxt[child.pos[i]]]) {
+				child.pos[j] = nxt[child.pos[i]];
+				vis[child.pos[j]] = true;
+			}
+		}
+	}
+
+	vector <int> unused;
+	for (int i = 0; i < N; i++)
+		if (!vis[i])
+			unused.push_back(i);
+	random_shuffle(unused.begin(), unused.end());
+
+	int j = 0;
+	for (int i = 0; i < N; i++)
+		if (child.pos[i] == -1)
+			child.pos[i] = unused[j++];
+
+	if (igual >= CHANGE_MUT) {
+		igual = 0;
+		if (tx_mut == MIN_MUT) 
+			tx_mut = MAX_MUT;
+		else 
+			tx_mut--;
+	}
+
+	for (int i = 0; i < tx_mut; i++) {
+		if (raffle(mut[tx_mut])) {
+			int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
 			swap (child.pos[i], child.pos[j]);
 		}
 	}
@@ -140,6 +207,13 @@ void reproduction () {
 	}
 
 	next_gen.push_back(pop[POP - 1]);
+
+/*	while (next_gen.size() < POP/100) {
+		Gen mama = pop[POP - 1];
+		Gen papa = parents[rand()%parents.size()];
+
+		next_gen.push_back(cross(mama, papa));
+	}	*/
 
 	while (next_gen.size() < POP) {
 		Gen mama = parents[rand()%parents.size()];
