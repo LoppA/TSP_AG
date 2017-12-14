@@ -275,6 +275,11 @@ int main (int argc, char *argv[]) {
 	}
 	fclose(fit_file);
 
+	FILE * path_file = fopen(PATH_FILENAME, "w");
+	for (int i = 0; i < N; i++) fprintf(path_file, "%d ", best.pos[i]);
+	fprintf(path_file, "%d", best.pos[0]);
+	fclose(path_file);
+
 	best.print();
 	printf ("%lf\n", best.fitness);
 

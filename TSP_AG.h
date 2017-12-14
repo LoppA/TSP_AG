@@ -15,6 +15,7 @@
 
 #define COORD_FILENAME "./data_for_tsp/coordinates.txt"
 #define FIT_FILENAME "./fitnesses.txt"
+#define PATH_FILENAME "./path.txt"
 
 struct Gen {
 	int pos[N];

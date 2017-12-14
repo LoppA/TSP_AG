@@ -25,7 +25,7 @@ for line in path:
 
 	for i in range(len(val)):
 		sys.stdout.write("	{\n")
-		sys.stdout.write("	\"title\": \'Ginasio " + str(cnt) + "\',\n")
+		sys.stdout.write("	\"title\": \'Local " + str(cnt) + "\',\n")
 		sys.stdout.write("	\"lat\": '" + str(id_lat[val[i]]) + "',\n")
 		sys.stdout.write("	\"lng\": '" + str(id_lng[val[i]]) + "',\n")
 		sys.stdout.write("	\"description\": \'\',\n")
