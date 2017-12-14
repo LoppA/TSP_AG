@@ -2,6 +2,7 @@
 #define __TSP_AG_H__
 
 #include <GL/glut.h>
+#include <map>
 
 #define N 25
 #define POP 10000
@@ -29,6 +30,9 @@
 
 #define NORMALIZATION_VAL 0.9
 #define NORMALIZE_Z false
+
+#define ANGLE_STEP 5.0
+#define FPS 60
 
 struct Gen {
 	int pos[N];
@@ -72,5 +76,14 @@ bool raffle (double);
 Gen cross (Gen, Gen);
 void reproduction();
 void predation();
+
+void special_down_call(int, int, int);
+void keyboard_down_call(unsigned char, int, int);
+
+void apply_matrix(GLdouble *, Point3D *, Point3D *);
+void draw();
+void redraw();
+
+std::map<int, Polar3D> get_map_coord();
 
 #endif

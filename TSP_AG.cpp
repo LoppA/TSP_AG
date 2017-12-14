@@ -8,7 +8,6 @@
 #include <cmath>
 #include <cfloat>
 #include <vector>
-#include <map>
 #include <algorithm>
 
 using namespace std;
@@ -80,6 +79,10 @@ Point3D Polar3D::to_Point3D(){
 int gen = 0, tx_mut = N_INI_MUT, igual = 0;
 double last_fit, mut = INI_MUT;
 Gen pop[POP], best;
+
+map<int, Polar3D> map_coord;
+int * cur_way;
+double rot_angle = 0.0, scale_x = 1.0, scale_y = 1.0;
 
 bool raffle (double prob) {
 	return rand() < ceil(prob * RAND_MAX);
@@ -172,19 +175,29 @@ void predation () {
 		pop[i] = Gen();
 }
 
+void special_down_call(int key, int x, int y){
+	if (key == GLUT_KEY_LEFT) rot_angle += ANGLE_STEP*scale_x*scale_y;
+	else if (key == GLUT_KEY_RIGHT) rot_angle -= ANGLE_STEP*scale_x*scale_y;
+}
+
+void keyboard_down_call(unsigned char key, int x, int y){
+	if (key == 'h') scale_x *= -1;
+	else if (key == 'v') scale_y *= -1;;
+}
+
 void apply_matrix(GLdouble * mat, Point3D * vect_in, Point3D * vect_out){
 	vect_out->x = (mat[0] * vect_in->x) + (mat[4] * vect_in->y) + (mat[8] * vect_in->z) + mat[12];
 	vect_out->y = (mat[1] * vect_in->x) + (mat[5] * vect_in->y) + (mat[9] * vect_in->z) + mat[13];
 	vect_out->z = (mat[2] * vect_in->x) + (mat[6] * vect_in->y) + (mat[10] * vect_in->z) + mat[14];
 }
 
-void draw(map<int, Polar3D> map_coord, int * way){
+void draw(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
 	GLdouble mat[16];
-	Point3D axis(map_coord[way[0]].to_Point3D().y, -map_coord[way[0]].to_Point3D().x, 0.0);
-	double ang = (map_coord[way[0]].phi)*180.0/M_PI;
+	Point3D axis(map_coord[cur_way[0]].to_Point3D().y, -map_coord[cur_way[0]].to_Point3D().x, 0.0);
+	double ang = (map_coord[cur_way[0]].phi)*180.0/M_PI;
 	glPushMatrix();
 	glTranslated(0.0, 0.0, -1.0);
 	glRotated(ang, axis.x, axis.y, axis.z);
@@ -194,7 +207,7 @@ void draw(map<int, Polar3D> map_coord, int * way){
 	Point3D in, out;
 	GLdouble max_dim = DBL_MIN;
 	for(int i=0; i<N; i++){
-		in = map_coord[way[i]].to_Point3D();
+		in = map_coord[cur_way[i]].to_Point3D();
 		apply_matrix(mat, &in, &out);
 		if (abs(out.x) > max_dim) max_dim = abs(out.x);
 		if (abs(out.y) > max_dim) max_dim = abs(out.y);
@@ -207,22 +220,16 @@ void draw(map<int, Polar3D> map_coord, int * way){
 	glGetDoublev(GL_MODELVIEW_MATRIX, mat);
 	glPopMatrix();
 	
-	/*
-	//Point3D up(1.0, 0.0, 0.0);
-	//apply_matrix(mat, &up, &out);
-	//Polar3D up_polar = out.to_Polar3D();
-	ang = -60.0;
-	axis = Point3D(0.0, 0.0, 1.0);
 	glPushMatrix();
-	glRotated(ang, axis.x, axis.y, axis.z);
+	glScaled(scale_x, scale_y, 1.0);
+	glRotated(rot_angle, 0.0, 0.0, 1.0);
 	glMultMatrixd(mat);
 	glGetDoublev(GL_MODELVIEW_MATRIX, mat);
 	glPopMatrix();
-	*/
 
 	vector<Point3D> points;
 	for (int i=0; i<N; i++){
-		in = map_coord[way[i]].to_Point3D();
+		in = map_coord[cur_way[i]].to_Point3D();
 		apply_matrix(mat, &in, &out);
 		points.push_back(out);
 	}
@@ -251,6 +258,12 @@ void draw(map<int, Polar3D> map_coord, int * way){
 	glFlush();
 }
 
+void redraw(int value)
+{
+	glutPostRedisplay();
+	glutTimerFunc(1000/FPS, &redraw, 0);
+}
+
 map<int, Polar3D> get_map_coord(){
 	int id;
 	GLdouble lat, lon;
@@ -267,6 +280,7 @@ map<int, Polar3D> get_map_coord(){
 
 int main (int argc, char *argv[]) {
 	srand(time(NULL));
+	map_coord = get_map_coord();
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);
@@ -307,10 +321,14 @@ int main (int argc, char *argv[]) {
 	}
 
 	best.print();
+	cur_way = best.pos;
 	printf ("%lf\n", best.fitness);
 
-	map<int, Polar3D> map_coord = get_map_coord();
-	draw(map_coord, best.pos);
+	glutSpecialFunc(&special_down_call);
+	glutKeyboardFunc(&keyboard_down_call);
+	glutDisplayFunc(&draw);
+	glutTimerFunc(0, &redraw, 0);
+
 	glutMainLoop();
 	return 0;
 }
