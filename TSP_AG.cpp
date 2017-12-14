@@ -234,25 +234,21 @@ void draw(){
 		points.push_back(out);
 	}
 
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glPushMatrix();
-	glTranslated(points[0].x, points[0].y, points[0].z);
-	glutSolidSphere(SPHERE_RADIUS, SPHERE_SLICES, SPHERE_STACKS);
-	glPopMatrix();
-	glColor3f(1.0f, 1.0f, 1.0f);
-	for (int i=1; i<N; i++){
+	for (int i=0; i<N; i++){
+		glColor3f(1.0f, ((double)i)*(1.0/(N-1)), ((double)i)*(1.0/(N-1)));
 		glPushMatrix();
 		glTranslated(points[i].x, points[i].y, points[i].z);
 		glutSolidSphere(SPHERE_RADIUS, SPHERE_SLICES, SPHERE_STACKS);
 		glPopMatrix();
 	}
 
-	glPushMatrix();
 	glBegin(GL_LINE_STRIP);
-	for (int i=0; i<N; i++) glVertex3d(points[i].x, points[i].y, points[i].z);
+	for (int i=0; i<N; i++){
+		glColor3f(1.0f, ((double)i)*(1.0/(N-1)), ((double)i)*(1.0/(N-1)));
+		glVertex3d(points[i].x, points[i].y, points[i].z);
+	}
 	glVertex3d(points[0].x, points[0].y, points[0].z);
 	glEnd();
-	glPopMatrix();
 
 	glutSwapBuffers();
 	glFlush();
