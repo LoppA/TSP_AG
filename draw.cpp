@@ -73,6 +73,7 @@ void init(int * argc, char ** argv, int size){
 	glutSpecialFunc(&special_down_call);
 	glutKeyboardFunc(&keyboard_down_call);
 	glutDisplayFunc(&draw);
+	glutTimerFunc(0, &redraw, 0);
 }
 
 void set_draw(int * new_way){
