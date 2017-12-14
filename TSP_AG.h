@@ -8,7 +8,7 @@
 #define POP 40000
 #define GEN 600
 
-#define PRED_RATE 0.3
+#define PRED_RATE 0.1
 #define PRED_FREC 10
 
 #define CHANGE_MUT 3
