@@ -22,11 +22,11 @@ for i in range(len(places)):
 		origin = places[i]
 		destination = places[j]
 
-		url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + destination + "&key=AIzaSyABfMCK_09oUfkg20j3O03Esg-XlNyLirA"
+		url = "https://maps.googleapis.com/maps/api/directions/json?origin=" + origin + "&destination=" + destination + "&key=AIzaSyB2KV2PPcP0cvkovFG-OJwiuN9dnVFKRqg"
 
 		response = urllib.urlopen(url)
 		data = json.loads(response.read())
-
+		
 		distance_str= data["routes"][0]["legs"][0]["distance"]["text"]
 		val = distance_str.split()
 		distance_km = float(val[0])
