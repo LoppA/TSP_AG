@@ -271,7 +271,6 @@ int main (int argc, char *argv[]) {
 	printf ("%lf\n", best.fitness);
 
 	set_draw(best.pos);
-	glutTimerFunc(0, &redraw, 0);
 	glutMainLoop();
 	return 0;
 }
