@@ -25,7 +25,7 @@ test:
 random_test:
 	./TSP_DP.out < ./data_for_tsp/random_distances.txt
 
-plot:
+graphic:
 	python ./plot/plot.py
 
 clean:
