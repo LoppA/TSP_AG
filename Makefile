@@ -17,4 +17,4 @@ test:
 	./TSP_DP.out < ./data_for_tsp/distances.txt
 
 clean:
-	rm -f *.out ./data_for_tsp/coordinates.txt ./data_for_tsp/distances.txt ./data_for_tsp/random_coordinates.txt
+	rm -f *.out ./data_for_tsp/coordinates.txt ./data_for_tsp/distances.txt ./data_for_tsp/random_coordinates.txt ./fitnesses.txt
