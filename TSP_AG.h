@@ -22,7 +22,7 @@
 #define WINDOW_POS 20
 #define WINDOW_SIZE 600
 
-#define COORD_FILENAME "coordinates.txt"
+#define COORD_FILENAME "./data_for_tsp/coordinates.txt"
 
 #define SPHERE_RADIUS 0.01
 #define SPHERE_SLICES 20
