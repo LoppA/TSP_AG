@@ -28,5 +28,8 @@ random_test:
 graphic:
 	python ./plot/plot.py
 
+map:
+	python ./generate_map/generate_map.py > generate_map/path_map.html
+
 clean:
 	rm -f *.out ./data_for_tsp/*coordinates* ./data_for_tsp/*distances* ./plot/graphic_best.png
