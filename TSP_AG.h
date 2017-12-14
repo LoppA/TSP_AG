@@ -4,20 +4,17 @@
 #include <GL/glut.h>
 #include <map>
 
-#define N 20
-#define POP 10000
-#define GEN 100
+#define N 100
+#define POP 40000
+#define GEN 600
 
 #define PRED_RATE 0.3
 #define PRED_FREC 10
 
 #define CHANGE_MUT 3
-#define INI_MUT 0.5
-#define MAX_MUT 0.9
-#define INC_MUT 0.1
-#define N_INI_MUT 5
-#define N_MIN_MUT 1
-#define N_MAX_MUT 9
+#define INI_MUT 2
+#define MIN_MUT 1
+#define MAX_MUT 3
 
 #define WINDOW_POS 20
 #define WINDOW_SIZE 600

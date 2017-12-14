@@ -76,9 +76,10 @@ Point3D Polar3D::to_Point3D(){
 	return Point3D(aux_x, aux_y, aux_z);
 }
 
-int gen = 0, tx_mut = N_INI_MUT, igual = 0;
-double last_fit, mut = INI_MUT;
+int gen = 0, tx_mut = INI_MUT, igual = 0;
+double last_fit;
 Gen pop[POP], best;
+const double mut[11] = {0.1, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
 
 map<int, Polar3D> map_coord;
 int * cur_way;
@@ -122,20 +123,17 @@ Gen cross (Gen mama, Gen papa) {
 
 	if (igual >= CHANGE_MUT) {
 		igual = 0;
-		if (tx_mut == N_MIN_MUT) {
-			tx_mut = N_MAX_MUT;
-			mut = MAX_MUT;
-		} else {
+		if (tx_mut == MIN_MUT) 
+			tx_mut = MAX_MUT;
+		else 
 			tx_mut--;
-			mut -= INC_MUT;
-		}
 	}
 
-	int ct = 0;
-	while (ct++ < tx_mut and raffle(mut)) {
-		int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
-
-		swap (child.pos[i], child.pos[j]);
+	for (int i = 0; i < tx_mut; i++) {
+		if (raffle(mut[tx_mut])) {
+			int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
+			swap (child.pos[i], child.pos[j]);
+		}
 	}
 
 	child.rate();
@@ -159,13 +157,6 @@ void reproduction () {
 
 	next_gen.push_back(pop[POP - 1]);
 
-	for (int i = 0; i < POP/2; i++) {
-		Gen mama = pop[POP-1];
-		Gen papa = parents[rand()%parents.size()];
-
-		next_gen.push_back(cross(mama, papa));
-	}
-
 	while (next_gen.size() < POP) {
 		Gen mama = parents[rand()%parents.size()];
 		Gen papa = parents[rand()%parents.size()];
@@ -178,7 +169,7 @@ void reproduction () {
 }
 
 void predation () {
-	int pred = mut * PRED_RATE * POP;
+	int pred = mut[tx_mut] * PRED_RATE * POP;
 	for (int i = 0; i < pred; i++)
 		pop[i] = Gen();
 }
@@ -324,7 +315,7 @@ int main (int argc, char *argv[]) {
 			igual = 0;
 		last_fit = best.fitness;
 
-		printf ("   Best: %lf  mut: %lf   tx_mut: %d\n\n", best.fitness, mut, tx_mut);
+		printf ("   Best: %lf  tx_mut: %d\n\n", best.fitness, tx_mut);
 		reproduction();
 	}
 	fclose(fit_file);
