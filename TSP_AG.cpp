@@ -111,6 +111,11 @@ Gen cross (Gen mama, Gen papa) {
 			}
 		}
 	} else {
+		for (int i = split; i < N; i++) {
+			child.pos[i] = mama.pos[i];
+			vis[child.pos[i]] = true;
+		}
+
 		for (int i = 0; i < split; i++) {
 			if (!vis[papa.pos[i]]) {
 				child.pos[i] = papa.pos[i];
@@ -118,11 +123,6 @@ Gen cross (Gen mama, Gen papa) {
 			} else {
 				child.pos[i] = -1;
 			}
-		}
-
-		for (int i = split; i < N; i++) {
-			child.pos[i] = mama.pos[i];
-			vis[child.pos[i]] = true;
 		}
 	}
 
