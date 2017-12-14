@@ -1,6 +1,6 @@
 import urllib, json, sys
 
-places_file = open("data_for_tsp/places.txt")
+places_file = open("data_for_tsp/places_2.txt")
 places = list()
 
 for line in places_file:
