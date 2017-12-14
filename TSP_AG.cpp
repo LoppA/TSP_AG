@@ -96,17 +96,33 @@ Gen cross (Gen mama, Gen papa) {
 
 	int split = rand()%(N + 1);
 
-	for (int i = 0; i < split; i++) {
-		child.pos[i] = mama.pos[i];
-		vis[child.pos[i]] = true;
-	}
-
-	for (int i = split; i < N; i++) {
-		if (!vis[papa.pos[i]]) {
-			child.pos[i] = papa.pos[i];
+	if (rand()%2) {
+		for (int i = 0; i < split; i++) {
+			child.pos[i] = mama.pos[i];
 			vis[child.pos[i]] = true;
-		} else {
-			child.pos[i] = -1;
+		}
+
+		for (int i = split; i < N; i++) {
+			if (!vis[papa.pos[i]]) {
+				child.pos[i] = papa.pos[i];
+				vis[child.pos[i]] = true;
+			} else {
+				child.pos[i] = -1;
+			}
+		}
+	} else {
+		for (int i = split; i < N; i++) {
+			child.pos[i] = mama.pos[i];
+			vis[child.pos[i]] = true;
+		}
+
+		for (int i = 0; i < split; i++) {
+			if (!vis[papa.pos[i]]) {
+				child.pos[i] = papa.pos[i];
+				vis[child.pos[i]] = true;
+			} else {
+				child.pos[i] = -1;
+			}
 		}
 	}
 
