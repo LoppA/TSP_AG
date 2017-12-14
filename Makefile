@@ -1,6 +1,7 @@
 all:
 	g++ TSP_AG.cpp -o TSP_AG.out -Wall -Wextra -Wno-unused-parameter -O3 -lGL -lglut -lm
 	g++ TSP_DP.cpp -o TSP_DP.out -Wall -Wextra -O3 -lGL -lglut -lm
+	g++ TSP_TRIVIAL.cpp -o TSP_TRIVIAL.out -Wall -Wextra -O3 -lGL -lglut -lm
 
 maps_case:
 	python ./data_for_tsp/coord_getter.py > ./data_for_tsp/coordinates.txt
