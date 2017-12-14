@@ -11,10 +11,10 @@
 #define PRED_RATE 0.1
 #define PRED_FREC 10
 
-#define CHANGE_MUT 3
-#define INI_MUT 2
+#define CHANGE_MUT 10
+#define INI_MUT 4
 #define MIN_MUT 1
-#define MAX_MUT 3
+#define MAX_MUT 8
 
 #define WINDOW_POS 20
 #define WINDOW_SIZE 600
