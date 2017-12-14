@@ -79,7 +79,8 @@ Point3D Polar3D::to_Point3D(){
 int gen = 0, tx_mut = INI_MUT, igual = 0;
 double last_fit;
 Gen pop[POP], best;
-const double mut[11] = {0.1, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
+//                      0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
+const double mut[16] = {0.1, 0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
 
 map<int, Polar3D> map_coord;
 int * cur_way;
@@ -145,12 +146,19 @@ Gen cross (Gen mama, Gen papa) {
 			tx_mut--;
 	}
 
-	for (int i = 0; i < tx_mut; i++) {
+	if (rand()%2) {
 		if (raffle(mut[tx_mut])) {
-			int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
+			int i = rand()%(N - tx_mut) + 1;
 
+			for (int j = 0; j < tx_mut - 1; j++)
+				swap (child.pos[i + j], child.pos[i + j + 1]);
+		}
 
-			swap (child.pos[i], child.pos[j]);
+		if (raffle(mut[tx_mut])) {
+			for (int k = 0; k < tx_mut; k++) {
+				int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
+				swap (child.pos[i], child.pos[j]);
+			}
 		}
 	}
 
