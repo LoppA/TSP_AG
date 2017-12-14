@@ -6,9 +6,10 @@
 #include <ctime>
 #include <cstring>
 #include <cmath>
+#include <cfloat>
 #include <vector>
+#include <map>
 #include <algorithm>
-#include <GL/glut.h>
 
 using namespace std;
 
@@ -46,6 +47,34 @@ void Gen::operator = (const Gen &other) {
 
 bool Gen::operator < (const Gen &other) const {
 	return this->fitness > other.fitness;
+}
+
+Point3D::Point3D() : Point3D(0.0, 0.0, 0.0){}
+Point3D::Point3D(GLdouble x, GLdouble y, GLdouble z){
+	this->x = x;
+	this->y = y;
+	this->z = z;
+}
+Polar3D Point3D::to_Polar3D(){
+	GLdouble aux_p, aux_the, aux_phi;
+	aux_p = sqrt(this->x*this->x + this->y*this->y + this->z*this->z);
+	aux_the = atan(this->y/this->x);
+	aux_phi = acos(this->z/aux_p);
+	return Polar3D(aux_p, aux_the, aux_phi);
+}
+
+Polar3D::Polar3D() : Polar3D(0.0, 0.0, 0.0){}
+Polar3D::Polar3D(GLdouble p, GLdouble the, GLdouble phi){
+	this->p = p;
+	this->the = the;
+	this->phi = phi;
+}
+Point3D Polar3D::to_Point3D(){
+	GLdouble aux_x, aux_y, aux_z;
+	aux_x = this->p*cos(this->the)*sin(this->phi);
+	aux_y = this->p*sin(this->the)*sin(this->phi);
+	aux_z = this->p*cos(this->phi);
+	return Point3D(aux_x, aux_y, aux_z);
 }
 
 int gen = 0, tx_mut = N_INI_MUT, igual = 0;
@@ -143,6 +172,112 @@ void predation () {
 		pop[i] = Gen();
 }
 
+void apply_matrix(GLdouble * mat, Point3D * vect_in, Point3D * vect_out){
+	vect_out->x = (mat[0] * vect_in->x) + (mat[4] * vect_in->y) + (mat[8] * vect_in->z) + mat[12];
+	vect_out->y = (mat[1] * vect_in->x) + (mat[5] * vect_in->y) + (mat[9] * vect_in->z) + mat[13];
+	vect_out->z = (mat[2] * vect_in->x) + (mat[6] * vect_in->y) + (mat[10] * vect_in->z) + mat[14];
+}
+
+void draw(map<int, Polar3D> map_coord, int * way){
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+	GLdouble mat[16];
+	Point3D axis(map_coord[way[0]].to_Point3D().y, -map_coord[way[0]].to_Point3D().x, 0.0);
+	double ang = (map_coord[way[0]].phi)*180.0/M_PI;
+	glPushMatrix();
+	glTranslated(0.0, 0.0, -1.0);
+	glRotated(ang, axis.x, axis.y, axis.z);
+	glGetDoublev(GL_MODELVIEW_MATRIX, mat);
+	glPopMatrix();
+
+	Point3D in, out;
+	GLdouble max_x, min_x, max_y, min_y, max_z, min_z;
+	max_x = max_y = max_z = DBL_MIN;
+	min_x = min_y = min_z = DBL_MAX;
+	for(int i=0; i<N; i++){
+		in = map_coord[way[i]].to_Point3D();
+		apply_matrix(mat, &in, &out);
+		if (out.x > max_x) max_x = out.x;
+		if (out.y > max_y) max_y = out.y;
+		if (out.z > max_z) max_z = out.z;
+		if (out.x < min_x) min_x = out.x;
+		if (out.y < min_y) min_y = out.y;
+		if (out.z < min_z) min_z = out.z;
+	}
+	max_x = abs(max_x); max_y = abs(max_y); max_z = abs(max_z);
+	min_x = abs(min_x); min_y = abs(min_y); min_z = abs(min_z);
+	if (min_x > max_x) max_x = min_x;
+	if (min_y > max_y) max_y = min_y;
+	if (min_z > max_z) max_z = min_z;
+	if (max_y > max_x) max_x = max_y;
+	if (max_z > max_x) max_x = max_z;
+
+	glPushMatrix();
+	glScaled(NORMALIZATION_VAL/max_x, NORMALIZATION_VAL/max_x, NORMALIZE_Z ? NORMALIZATION_VAL/max_x : 1.0);
+	glMultMatrixd(mat);
+	glGetDoublev(GL_MODELVIEW_MATRIX, mat);
+	glPopMatrix();
+	
+	/*
+	Point3D up(1.0, 0.0, 0.0);
+	apply_matrix(mat, &up, &out);
+	Polar3D up_polar = out.to_Polar3D();
+	ang = up_polar.the*180.0/M_PI;
+	printf("%lf\n", ang);
+	axis = Point3D(0.0, 0.0, 1.0);
+	glPushMatrix();
+	glRotated(180, axis.x, axis.y, axis.z);
+	glMultMatrixd(mat);
+	glGetDoublev(GL_MODELVIEW_MATRIX, mat);
+	glPopMatrix();
+	*/
+
+	vector<Point3D> points;
+	for (int i=0; i<N; i++){
+		in = map_coord[way[i]].to_Point3D();
+		apply_matrix(mat, &in, &out);
+		points.push_back(out);
+	}
+
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glPushMatrix();
+	glTranslated(points[0].x, points[0].y, points[0].z);
+	glutSolidSphere(SPHERE_RADIUS, SPHERE_SLICES, SPHERE_STACKS);
+	glPopMatrix();
+	glColor3f(1.0f, 1.0f, 1.0f);
+	for (int i=1; i<N; i++){
+		glPushMatrix();
+		glTranslated(points[i].x, points[i].y, points[i].z);
+		glutSolidSphere(SPHERE_RADIUS, SPHERE_SLICES, SPHERE_STACKS);
+		glPopMatrix();
+	}
+
+	glPushMatrix();
+	glBegin(GL_LINE_STRIP);
+	for (int i=0; i<N; i++) glVertex3d(points[i].x, points[i].y, points[i].z);
+	glVertex3d(points[0].x, points[0].y, points[0].z);
+	glEnd();
+	glPopMatrix();
+
+	glutSwapBuffers();
+	glFlush();
+}
+
+map<int, Polar3D> get_map_coord(){
+	int id;
+	GLdouble lat, lon;
+	map<int, Polar3D> map_coord;
+	FILE * coord_file = fopen(COORD_FILENAME, "r");
+	for (int i=0; i<N; i++){
+		fscanf(coord_file, "%d%lf%lf", &id, &lat, &lon);
+		map_coord[id] = Polar3D(1.0, (lon+180.0)*M_PI/180.0, (lat+90.0)*M_PI/180.0);
+	}
+	fclose(coord_file);
+
+	return map_coord;
+}
+
 int main (int argc, char *argv[]) {
 	srand(time(NULL));
 
@@ -156,7 +291,6 @@ int main (int argc, char *argv[]) {
 	glMatrixMode(GL_MODELVIEW);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-	//glEnable(GL_NORMALIZE);
 
 	for (int i = 0; i < N; i++) 
 		for (int j = 0; j < N; j++) 
@@ -188,6 +322,8 @@ int main (int argc, char *argv[]) {
 	best.print();
 	printf ("%lf\n", best.fitness);
 
+	map<int, Polar3D> map_coord = get_map_coord();
+	draw(map_coord, best.pos);
 	glutMainLoop();
 	return 0;
 }
