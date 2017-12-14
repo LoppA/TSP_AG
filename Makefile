@@ -1,5 +1,5 @@
 all:
-	g++ TSP_AG.cpp -o TSP_AG.out -Wall -Wextra -O3 -lGL -lglut -lm
+	g++ TSP_AG.cpp -o TSP_AG.out -Wall -Wextra -Wno-unused-parameter -O3 -lGL -lglut -lm
 	g++ TSP_DP.cpp -o TSP_DP.out -Wall -Wextra -O3 -lGL -lglut -lm
 
 maps_case:

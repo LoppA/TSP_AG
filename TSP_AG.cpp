@@ -266,7 +266,7 @@ map<int, Polar3D> get_map_coord(){
 	map<int, Polar3D> map_coord;
 	FILE * coord_file = fopen(COORD_FILENAME, "r");
 	for (int i=0; i<N; i++){
-		fscanf(coord_file, "%d%lf%lf", &id, &lat, &lon);
+		if (fscanf(coord_file, "%d%lf%lf", &id, &lat, &lon)) printf("Reading Error\n");
 		map_coord[id] = Polar3D(1.0, (lon+180.0)*M_PI/180.0, (lat+90.0)*M_PI/180.0);
 	}
 	fclose(coord_file);
@@ -291,7 +291,7 @@ int main (int argc, char *argv[]) {
 
 	for (int i = 0; i < N; i++)
 		for (int j = 0; j < N; j++)
-			scanf ("%lf", &dist[i][j]);
+			if (scanf ("%lf", &dist[i][j]) != 1) printf("Reading Error\n");
 
 	for (int i = 0; i < POP; i++)
 		pop[i] = Gen();
