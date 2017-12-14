@@ -190,44 +190,31 @@ void draw(map<int, Polar3D> map_coord, int * way){
 	glRotated(ang, axis.x, axis.y, axis.z);
 	glGetDoublev(GL_MODELVIEW_MATRIX, mat);
 	glPopMatrix();
-
+	
 	Point3D in, out;
-	GLdouble max_x, min_x, max_y, min_y, max_z, min_z;
-	max_x = max_y = max_z = DBL_MIN;
-	min_x = min_y = min_z = DBL_MAX;
+	GLdouble max_dim = DBL_MIN;
 	for(int i=0; i<N; i++){
 		in = map_coord[way[i]].to_Point3D();
 		apply_matrix(mat, &in, &out);
-		if (out.x > max_x) max_x = out.x;
-		if (out.y > max_y) max_y = out.y;
-		if (out.z > max_z) max_z = out.z;
-		if (out.x < min_x) min_x = out.x;
-		if (out.y < min_y) min_y = out.y;
-		if (out.z < min_z) min_z = out.z;
+		if (abs(out.x) > max_dim) max_dim = abs(out.x);
+		if (abs(out.y) > max_dim) max_dim = abs(out.y);
+		if (abs(out.z) > max_dim) max_dim = abs(out.z);
 	}
-	max_x = abs(max_x); max_y = abs(max_y); max_z = abs(max_z);
-	min_x = abs(min_x); min_y = abs(min_y); min_z = abs(min_z);
-	if (min_x > max_x) max_x = min_x;
-	if (min_y > max_y) max_y = min_y;
-	if (min_z > max_z) max_z = min_z;
-	if (max_y > max_x) max_x = max_y;
-	if (max_z > max_x) max_x = max_z;
 
 	glPushMatrix();
-	glScaled(NORMALIZATION_VAL/max_x, NORMALIZATION_VAL/max_x, NORMALIZE_Z ? NORMALIZATION_VAL/max_x : 1.0);
+	glScaled(NORMALIZATION_VAL/max_dim, NORMALIZATION_VAL/max_dim, NORMALIZE_Z ? NORMALIZATION_VAL/max_dim : 1.0);
 	glMultMatrixd(mat);
 	glGetDoublev(GL_MODELVIEW_MATRIX, mat);
 	glPopMatrix();
 	
 	/*
-	Point3D up(1.0, 0.0, 0.0);
-	apply_matrix(mat, &up, &out);
-	Polar3D up_polar = out.to_Polar3D();
-	ang = up_polar.the*180.0/M_PI;
-	printf("%lf\n", ang);
+	//Point3D up(1.0, 0.0, 0.0);
+	//apply_matrix(mat, &up, &out);
+	//Polar3D up_polar = out.to_Polar3D();
+	ang = -60.0;
 	axis = Point3D(0.0, 0.0, 1.0);
 	glPushMatrix();
-	glRotated(180, axis.x, axis.y, axis.z);
+	glRotated(ang, axis.x, axis.y, axis.z);
 	glMultMatrixd(mat);
 	glGetDoublev(GL_MODELVIEW_MATRIX, mat);
 	glPopMatrix();
