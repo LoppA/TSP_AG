@@ -289,8 +289,8 @@ int main (int argc, char *argv[]) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 
-	for (int i = 0; i < N; i++) 
-		for (int j = 0; j < N; j++) 
+	for (int i = 0; i < N; i++)
+		for (int j = 0; j < N; j++)
 			scanf ("%lf", &dist[i][j]);
 
 	for (int i = 0; i < POP; i++)

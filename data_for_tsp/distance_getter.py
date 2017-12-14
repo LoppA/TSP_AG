@@ -1,6 +1,6 @@
-import urllib, json
+import urllib, json, sys
 
-places_file = open("places.txt")
+places_file = open("data_for_tsp/places.txt")
 places = list()
 
 for line in places_file:
@@ -11,6 +11,11 @@ for line in places_file:
 			line = line[:i] + "+" + line[i+1:]
 
 	places.append(line)
+
+dist = []
+
+for i in range(len(places)):
+	dist.append([0] * len(places))
 
 for i in range(len(places)):
 	for j in range(i+1, len(places)):
@@ -25,4 +30,11 @@ for i in range(len(places)):
 		distance_str= data["routes"][0]["legs"][0]["distance"]["text"]
 		val = distance_str.split()
 		distance_km = float(val[0])
-		print str(i) + " " + str(j) + " " + str(distance_km)
+
+		dist[i][j] = distance_km
+		dist[j][i] = distance_km
+
+for i in range(len(places)):
+	for j in range(len(places)):
+		sys.stdout.write(str(dist[i][j]) + " ")
+	sys.stdout.write("\n")

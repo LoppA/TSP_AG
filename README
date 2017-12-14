@@ -1,0 +1,23 @@
+Autores:
+	- Eduardo Santos Carlos de Souza (9293481)
+	- Guilherme Hideo Tubone (9019403)
+	- Lucas de Oliveira Pacheco (9293182)
+------------------------------------------------
+Pré-requisitos:
+	- Para executar é necessário ter instalado:
+		- OpenGL
+		- GLut
+------------------------------------------------
+Instruções de execução:
+
+PARA COMPILAR:
+	- make
+
+PARA GERAR UM CASO ALEATÓRIO: 
+	- make random_case
+
+PARA GERAR UM CASO A PARTIR DOS ENDEREÇOS EM data_for_tsp/places.txt:
+	- make maps_case
+
+PARA RODAR O CASO (INDEPENDENTE DAS OPÇÕES ANTERIORES):
+	- make run
