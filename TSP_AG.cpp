@@ -297,6 +297,7 @@ int main (int argc, char *argv[]) {
 		pop[i] = Gen();
 	best = pop[0];
 
+	FILE * fit_file = fopen(FIT_FILENAME, "w");
 	last_fit = -1.0;
 	while (gen++ < GEN) {
 		printf ("Gen: %d\n", gen);
@@ -306,6 +307,7 @@ int main (int argc, char *argv[]) {
 				best = pop[i];
 		}
 		cur_way = best.pos;
+		fprintf(fit_file, "%lf\n", best.fitness);
 		draw();
 
 		if (last_fit == best.fitness)
@@ -317,6 +319,7 @@ int main (int argc, char *argv[]) {
 		printf ("   Best: %lf  mut: %lf   tx_mut: %d\n\n", best.fitness, mut, tx_mut);
 		reproduction();
 	}
+	fclose(fit_file);
 
 	best.print();
 	cur_way = best.pos;

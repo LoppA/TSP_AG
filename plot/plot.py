@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-points_file = open("points.txt")
+points_file = open("../fitnesses.txt")
 points = list()
 
 for line in points_file:
