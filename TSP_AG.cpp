@@ -158,6 +158,14 @@ void reproduction () {
 	}
 
 	next_gen.push_back(pop[POP - 1]);
+
+	for (int i = 0; i < POP/2; i++) {
+		Gen mama = pop[POP-1];
+		Gen papa = parents[rand()%parents.size()];
+
+		next_gen.push_back(cross(mama, papa));
+	}
+
 	while (next_gen.size() < POP) {
 		Gen mama = parents[rand()%parents.size()];
 		Gen papa = parents[rand()%parents.size()];
@@ -266,7 +274,7 @@ map<int, Polar3D> get_map_coord(){
 	map<int, Polar3D> map_coord;
 	FILE * coord_file = fopen(COORD_FILENAME, "r");
 	for (int i=0; i<N; i++){
-		if (fscanf(coord_file, "%d%lf%lf", &id, &lat, &lon)) printf("Reading Error\n");
+		if (fscanf(coord_file, "%d%lf%lf", &id, &lat, &lon) != 3) printf("Reading Error\n");
 		map_coord[id] = Polar3D(1.0, (lon+180.0)*M_PI/180.0, (lat+90.0)*M_PI/180.0);
 	}
 	fclose(coord_file);

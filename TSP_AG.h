@@ -4,7 +4,7 @@
 #include <GL/glut.h>
 #include <map>
 
-#define N 30
+#define N 20
 #define POP 10000
 #define GEN 100
 
