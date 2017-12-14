@@ -6,6 +6,7 @@ maps_case:
 	python ./data_for_tsp/coord_getter.py > ./data_for_tsp/coordinates.txt
 	python ./data_for_tsp/distance_getter.py > ./data_for_tsp/distances.txt
 	cp ./data_for_tsp/distances.txt ./in
+	cp ./data_for_tsp/coordinates.txt ./coordinates.txt
 
 random_case:
 	g++ random_in.cpp -o random_in.out -Wall -O3 -lGL -lglut

@@ -305,6 +305,8 @@ int main (int argc, char *argv[]) {
 			if (pop[i].fitness < best.fitness)
 				best = pop[i];
 		}
+		cur_way = best.pos;
+		draw();
 
 		if (last_fit == best.fitness)
 			igual++;
