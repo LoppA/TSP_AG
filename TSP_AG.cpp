@@ -121,7 +121,7 @@ Gen cross (Gen mama, Gen papa) {
 			for (int j = 0; j < tx_mut - 1; j++)
 				swap (child.pos[i + j], child.pos[i + j + 1]);
 		}
-
+	} else {
 		if (raffle(mut[tx_mut])) {
 			for (int k = 0; k < tx_mut; k++) {
 				int i = rand()%(N - 1) + 1, j = rand()%(N - 1) + 1;
